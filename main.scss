@@ -1,0 +1,55 @@
+@import "settings";
+@import "mixins";
+@import "functions";
+
+
+@mixin rowlow-responsive-visibility( $breakpoint ) {
+	.visible--#{$breakpoint} {display: block !important};
+	table.#{$rowlow-visibility-namespace}visible--#{$breakpoint}  { display: table; }
+	tr.#{$rowlow-visibility-namespace}visible--#{$breakpoint}     { display: table-row !important; }
+	th.#{$rowlow-visibility-namespace}visible--#{$breakpoint},
+	td.#{$rowlow-visibility-namespace}visible--#{$breakpoint}     { display: table-cell !important; }
+}
+
+@each $breakpoint-name, $breakpoint-value in $rowlow-breakpoints {
+	
+	.#{$rowlow-visibility-namespace}visible--#{$breakpoint-name},
+	.#{$rowlow-visibility-namespace}visible--#{$breakpoint-name}--block,
+	.#{$rowlow-visibility-namespace}visible--#{$breakpoint-name}--inline,
+	.#{$rowlow-visibility-namespace}visible--#{$breakpoint-name}--inline-block{
+		display: none !important;
+	}
+
+	@media (min-width: rowlow-breakpoint-min($breakpoint-name)+ px) and (max-width: rowlow-breakpoint-max($breakpoint-name) + px) {
+		@include rowlow-responsive-visibility($breakpoint-name);
+		.#{$rowlow-visibility-namespace}visible--#{$breakpoint-name}--block {
+			display: block !important;
+		}
+		.#{$rowlow-visibility-namespace}visible--#{$breakpoint-name}--inline {
+			display: inline !important;
+		}
+		.#{$rowlow-visibility-namespace}visible--#{$breakpoint-name}--inline-block {
+			display: inline-block !important;
+		}
+		.#{$rowlow-visibility-namespace}hidden--#{$breakpoint-name}{
+			display: none !important;
+		}
+	}
+}
+
+
+@media print {
+	@include rowlow-responsive-visibility('print');
+	.visible--print-block {
+		display: block !important;
+	}
+	.visible--print-inline {
+		display: inline !important;
+	}
+	.visible--print-inline-block {
+		display: inline-block !important;
+	}
+	.hidden--print {
+		display: none !important;
+	}
+}
